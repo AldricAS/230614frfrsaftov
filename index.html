@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Daftar Report</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nama</th>
+                <th>Judul Masalah</th>
+                <th>Deskripsi</th>
+            </tr>
+        </thead>
+        <tbody id="reportTable"></tbody>
+    </table>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAA-SJXBN4WVFyqbOPqFlTFIUR21n9yduc",
+            authDomain: "report-ca2f1.firebaseapp.com",
+            projectId: "report-ca2f1",
+            storageBucket: "report-ca2f1.firebasestorage.app",
+            messagingSenderId: "402760074834",
+            appId: "1:402760074834:web:2b5a96af5baef72540818b"
+        };
+
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        async function fetchReports() {
+            const querySnapshot = await db.collection("reports").get();
+            const tableBody = document.getElementById('reportTable');
+            tableBody.innerHTML = "";
+
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const row = `
+                    <tr>
+                        <td>${data.nama}</td>
+                        <td>${data.judul}</td>
+                        <td>${data.deskripsi}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        fetchReports();
+    </script>
+</body>
+</html>
